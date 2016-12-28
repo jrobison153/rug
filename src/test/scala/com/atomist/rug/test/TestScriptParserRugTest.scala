@@ -7,7 +7,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class TestScriptParserRugTest extends FlatSpec with Matchers {
 
-  val parser = RugTestParser
+  val parser = ParserCombinatorTestScriptParser
 
   it should "parse computations" in {
     val f = InlineFileSpec("src/main/java/Dog.java", "class Dog {}")

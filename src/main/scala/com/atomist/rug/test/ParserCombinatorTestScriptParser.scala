@@ -6,7 +6,7 @@ import com.atomist.source.FileArtifact
 /**
   * Use Scala ParserCombinators to parse test scenario scripts
   */
-object RugTestParser
+object ParserCombinatorTestScriptParser
   extends CommonRugProductionsParser {
 
   import RugTestTokens._

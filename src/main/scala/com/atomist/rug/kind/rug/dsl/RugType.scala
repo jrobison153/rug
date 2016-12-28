@@ -1,7 +1,7 @@
 package com.atomist.rug.kind.rug.dsl
 
 import com.atomist.project.ProjectOperationArguments
-import com.atomist.rug.kind.core.{DirectoryMutableView, FileArtifactBackedMutableView, ProjectMutableView}
+import com.atomist.rug.kind.core.{DirectoryArtifactMutableView, FileArtifactBackedMutableView, ProjectMutableView}
 import com.atomist.rug.parser.Selected
 import com.atomist.rug.runtime.rugdsl.Evaluator
 import com.atomist.rug.spi.{MutableView, ReflectivelyTypedType, Type}
@@ -22,7 +22,7 @@ class EditorType(evaluator: Evaluator) extends Type(evaluator) with Reflectively
       case pmv: ProjectMutableView => ???
       case f: FileArtifactBackedMutableView =>
         Some(Seq(new EditorMutableView(f.currentBackingObject, f.parent)))
-      case d: DirectoryMutableView => ???
+      case d: DirectoryArtifactMutableView => ???
       case _ => None
     }
 

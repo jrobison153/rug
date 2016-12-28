@@ -46,7 +46,7 @@ class JsonType(
           .filter(f => f.filename.endsWith(Extension))
           .map(j => new JsonMutableView(j.currentBackingObject, j.parent))
         )
-      case dmv: DirectoryMutableView =>
+      case dmv: DirectoryArtifactMutableView =>
         Some(dmv.currentBackingObject
           .allFiles
           .filter(f => f.name.endsWith(Extension))

@@ -8,8 +8,8 @@ abstract class ArtifactContainerMutableView[T <: ArtifactContainer](
                                                                      parent: MutableView[_])
   extends ViewSupport[T](originalBackingObject, parent) {
 
-  val FileTypeName = Typed.typeToTypeName(classOf[FileMutableView])
-  val DirectoryTypeName = Typed.typeToTypeName(classOf[DirectoryMutableView])
+  val FileTypeName = Typed.typeToTypeName(classOf[FileArtifactMutableView])
+  val DirectoryTypeName = Typed.typeToTypeName(classOf[DirectoryArtifactMutableView])
   override def childNodeTypes: Set[String] = Set(FileTypeName, DirectoryTypeName)
 
   override def childNodeNames: Set[String] = currentBackingObject.artifacts.map(_.name).toSet
@@ -20,14 +20,14 @@ abstract class ArtifactContainerMutableView[T <: ArtifactContainer](
 
   protected def kids(fieldName: String, parent: ProjectMutableView): Seq[MutableView[_]] = fieldName match {
     case FileTypeName =>
-      currentBackingObject.allFiles.view.map(f => new FileMutableView(f, parent))
+      currentBackingObject.allFiles.view.map(f => new FileArtifactMutableView(f, parent))
     case DirectoryTypeName =>
-      currentBackingObject.allDirectories.view.map(d => new DirectoryMutableView(d, parent))
+      currentBackingObject.allDirectories.view.map(d => new DirectoryArtifactMutableView(d, parent))
     case maybeContainedArtifactName =>
       val arts = currentBackingObject.artifacts.filter(_.name.equals(maybeContainedArtifactName))
       arts.map {
-        case d : DirectoryArtifact => new DirectoryMutableView(d, parent)
-        case f : FileArtifact => new FileMutableView(f, parent)
+        case d : DirectoryArtifact => new DirectoryArtifactMutableView(d, parent)
+        case f : FileArtifact => new FileArtifactMutableView(f, parent)
       }
   }
 
@@ -37,14 +37,14 @@ abstract class ArtifactContainerMutableView[T <: ArtifactContainer](
   @ExportFunction(readOnly = true, description = "Find file with the given path. Return null if not found.")
   def findFile(@ExportFunctionParameterDescription(name = "path",
     description = "Path of the file we want")
-                 path: String): FileMutableView = {
+                 path: String): FileArtifactMutableView = {
     val parent: ProjectMutableView = this match {
       case pmv: ProjectMutableView => pmv
-      case dmv: DirectoryMutableView => dmv.parent
+      case dmv: DirectoryArtifactMutableView => dmv.parent
     }
     currentBackingObject.findFile(path) match {
       case None => null
-      case Some(f) => new FileMutableView(f, parent)
+      case Some(f) => new FileArtifactMutableView(f, parent)
     }
   }
 
@@ -59,10 +59,12 @@ abstract class ArtifactContainerMutableView[T <: ArtifactContainer](
                       path: String): Boolean = currentBackingObject.findDirectory(path).isDefined
 }
 
-class DirectoryMutableView(
+class DirectoryArtifactMutableView(
                             originalBackingObject: DirectoryArtifact,
                             override val parent: ProjectMutableView)
   extends ArtifactContainerMutableView[DirectoryArtifact](originalBackingObject, parent) {
+  
+  override def nodeType = "Directory"
 
   @ExportFunction(readOnly = true, description = "Return the name of the directory")
   override def name: String = currentBackingObject.name

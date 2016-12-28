@@ -8,7 +8,7 @@ import scala.collection.JavaConverters._
 /**
   * Mutable view for working directly with files.
   */
-class FileMutableView(
+class FileArtifactMutableView(
                        originalBackingObject: FileArtifact,
                        override val parent: ProjectMutableView)
   extends FileArtifactBackedMutableView(originalBackingObject, parent)
@@ -21,6 +21,8 @@ class FileMutableView(
       append(newString)
     }
   }
+
+  override def nodeType: String = "File"
 
   @ExportFunction(readOnly = true, description = "Name of the file, excluding path")
   def name: String = filename

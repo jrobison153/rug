@@ -39,7 +39,7 @@ class JavaTypeType(evaluator: Evaluator)
         Some(
           Seq(new JavaSourceMutableView(fmv.originalBackingObject, JavaProjectMutableView(fmv.parent))).flatMap(s => s.childrenNamed(JavaTypeAlias))
         )
-      case dmv: DirectoryMutableView =>
+      case dmv: DirectoryArtifactMutableView =>
         val jpmv = JavaProjectMutableView(dmv.parent)
         val filesInDir = dmv.childNodes
         val javaSourceFiles = filesInDir collect {

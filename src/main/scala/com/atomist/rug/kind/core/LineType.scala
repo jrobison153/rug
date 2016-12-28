@@ -33,7 +33,7 @@ class LineType(
                                    poa: ProjectOperationArguments,
                                    identifierMap: Map[String, Object]): Option[Seq[MutableView[_]]] = {
     context match {
-      case fa: FileMutableView =>
+      case fa: FileArtifactMutableView =>
         Some(fa.originalBackingObject.content.lines
           .zipWithIndex
           .map(tup => new LineMutableView(tup._1, tup._2, fa))
@@ -48,7 +48,7 @@ class LineType(
 class LineMutableView(
                        originalBackingObject: String,
                        linenum: Int,
-                       override val parent: FileMutableView)
+                       override val parent: FileArtifactMutableView)
   extends ViewSupport[String](originalBackingObject, parent)
     with TerminalView[String] {
 
@@ -77,7 +77,7 @@ class LineMutableView(
     applied(parent)
   }
 
-  private def applied(f: FileMutableView) = {
+  private def applied(f: FileArtifactMutableView) = {
     var i = 0
     val newLines =
       for {
